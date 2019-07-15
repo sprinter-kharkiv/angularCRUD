@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {UserService} from './services/user.service';
+import {IUser} from './store/models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +9,15 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private modalService: NgbModal) {
+  constructor(
+    private modalService: NgbModal,
+    private userService: UserService
+  ) {
 
   }
-  title = 'angular-Crud';
+  title = 'angular-CRUD';
   closeResult: string;
+  usersList;
 
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
@@ -34,7 +40,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('data');
+
+    this.userService.getUsers().subscribe(
+      (users: IUser[]) => this.usersList = users,
+      (err) => console.log(err)
+    );
+    console.log('data', this.usersList);
   }
 
 }
