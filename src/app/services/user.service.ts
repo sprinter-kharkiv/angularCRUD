@@ -15,10 +15,31 @@ export class UserService {
 
   getUsers(): Observable<IUser[]> {
     return this.http.get<IUser[]>(`${this.baseUrl}/customers`)
-      .pipe(
-        // map(data => JSON.encode(data)),
-        catchError((error: any) => throwError(error.json()))
-      );
+      .pipe(catchError((error: any) => throwError(error.json())));
   }
+
+  createUser(user) {
+    return this.http.post(`${this.baseUrl}/customers`, user);
+  }
+
+  // getUrlForId(id){
+  //   return `${this.getUrl()}/${id}`;
+  // }
+  //
+  // all() {
+  //   return this.HttpClient.get(this.getUrl());
+  // }
+  //
+  // create(project) {
+  //   return this.HttpClient.post(this.getUrl(), project)
+  // }
+  //
+  // update(project) {
+  //   return this.HttpClient.patch(this.getUrlForId(project.id), project)
+  // }
+  //
+  // delete(projectId) {
+  //   return this.HttpClient.delete(this.getUrlForId(projectId))
+  // }
 
 }

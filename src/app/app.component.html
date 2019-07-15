@@ -4,43 +4,74 @@
     <div class="col-sm-3">
       <div style="text-align:center">
         <h3>
-          {{ title }}!
+          {{ title }}
         </h3>
       </div>
+      <button class="btn btn-primary mt-4" (click)="createUser()">Add new user</button>
     </div>
     <div class="col-sm-9">
 
       <h3 class="mt-5">Users:</h3>
 
       <div class="list-group list-group-flush">
-        <a *ngFor="let user of usersList" href="#" class="list-group-item list-group-item-action">
-          {{ user.name }}
+        <a *ngFor="let user of usersList; let i = index" href="#" class="user-general list-group-item list-group-item-action" (click)="viewUser(user._id)">
+          <div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar--online' : 'user-general__avatar--offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>
+          <div class="user-general__info">
+            <h4>{{ user.name }}{{i}}</h4>
+            <h5>{{ user.balance }}</h5>
+          </div>
+          <div class="user-general__action">
+            <button type="button" class="btn-icon btn btn-success  btn-sm" (click)="editUser($event, user._id)">
+              <i class="material-icons">create</i>
+            </button>
+            <button type="button" class="btn-icon btn btn-danger  btn-sm" (click)="deleteUser($event, user._id)">
+              <i class="material-icons">clear</i>
+            </button>
+          </div>
         </a>
       </div>
 
-      <ng-template #content let-modal>
+      <ng-template #modalForm let-modal>
         <div class="modal-header">
-          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+          <h4 class="modal-title" id="modal-basic-title">{{ formTitle }}</h4>
           <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <form>
+
             <div class="form-group">
-              <label for="userName">User first name</label>
+              <label for="userName">Your full name:</label>
               <div class="input-group">
-                <input id="userName" class="form-control" placeholder="yyyy-mm-dd" name="dp" type="text">
+                <input id="userName" class="form-control" placeholder="enter your full name" name="userName" type="text">
               </div>
             </div>
+
+            <div class="form-group">
+              <label for="userName">Your full name:</label>
+              <div class="input-group">
+                <input id="userEmail" class="form-control" placeholder="enter your full name" name="userEmail" type="email">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="userName">Your full name:</label>
+              <div class="input-group">
+                <input id="userPhone" class="form-control" placeholder="+38(098)456-78-45" name="userPhone" type="text">
+              </div>
+            </div>
+
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+          <button type="button"
+                  class="btn btn-primary"
+                  [ngClass]="{'loading': isLoadingForm}"
+                  (click)="saveData(false)"
+                  [disabled]="isLoadingForm">{{ saveBtnText }}</button>
         </div>
       </ng-template>
-
-      <button class="btn btn-primary mt-4" (click)="open(content)">Add new user</button>
 
     </div>
   </div>
