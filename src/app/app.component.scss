@@ -94,3 +94,7 @@ $accent_blue: #2e43ff;
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+input.ng-touched.ng-invalid{
+  border-color: red;
+}

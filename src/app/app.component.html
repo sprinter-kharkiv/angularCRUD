@@ -14,17 +14,17 @@
       <h3 class="mt-5">Users:</h3>
 
       <div class="list-group list-group-flush">
-        <a *ngFor="let user of usersList; let i = index" href="#" class="user-general list-group-item list-group-item-action" (click)="viewUser(user._id)">
-          <div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar--online' : 'user-general__avatar--offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>
+        <a *ngFor="let user of users$ | async; let i = index;" href="#" class="user-general list-group-item list-group-item-action" (click)="viewUser(user.id)">
+          <!--<div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar--online' : 'user-general__avatar--offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>-->
           <div class="user-general__info">
-            <h4>{{ user.name }}{{i}}</h4>
-            <h5>{{ user.balance }}</h5>
+            <h4>{{ user.name }}</h4>
+            <h5>{{ user.balance != 0 ? user.balance : user.company }}</h5>
           </div>
           <div class="user-general__action">
-            <button type="button" class="btn-icon btn btn-success  btn-sm" (click)="editUser($event, user._id)">
+            <button type="button" class="btn-icon btn btn-success  btn-sm" (click)="editUser($event, user)">
               <i class="material-icons">create</i>
             </button>
-            <button type="button" class="btn-icon btn btn-danger  btn-sm" (click)="deleteUser($event, user._id)">
+            <button type="button" class="btn-icon btn btn-danger  btn-sm" (click)="deleteUser($event, user.id)">
               <i class="material-icons">clear</i>
             </button>
           </div>
@@ -39,36 +39,46 @@
           </button>
         </div>
         <div class="modal-body">
-          <form>
+          <form [formGroup]="usersForm">
 
             <div class="form-group">
               <label for="userName">Your full name:</label>
               <div class="input-group">
-                <input id="userName" class="form-control" placeholder="enter your full name" name="userName" type="text">
+                <input formControlName="name" id="userName" class="form-control" placeholder="enter your full name" name="userName" type="text">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="userName">Your full name:</label>
+              <label for="userCompany">Company:</label>
               <div class="input-group">
-                <input id="userEmail" class="form-control" placeholder="enter your full name" name="userEmail" type="email">
+                <input formControlName="company" id="userCompany" class="form-control" placeholder="Company name" name="userCompany" type="text">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="userName">Your full name:</label>
+              <label for="userEmail">Email:</label>
               <div class="input-group">
-                <input id="userPhone" class="form-control" placeholder="+38(098)456-78-45" name="userPhone" type="text">
+                <input formControlName="email" id="userEmail" class="form-control" placeholder="Your e-mail" name="userEmail" type="email">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="userPhone">Phone number:</label>
+              <div class="input-group">
+                <input formControlName="phone" id="userPhone" class="form-control" placeholder="+38(098)456-78-45" name="userPhone" type="text">
               </div>
             </div>
 
           </form>
+          <div>
+            {{usersForm.value | json}}
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button"
                   class="btn btn-primary"
                   [ngClass]="{'loading': isLoadingForm}"
-                  (click)="saveData(false)"
+                  (click)="saveData(userForUpdate)"
                   [disabled]="isLoadingForm">{{ saveBtnText }}</button>
         </div>
       </ng-template>

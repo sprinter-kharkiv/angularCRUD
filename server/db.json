@@ -1,7 +1,7 @@
 {
   "customers": [
     {
-      "_id": "5c35cd619a43410219512a43",
+      "id": "5c35cd619a43410219512a43",
       "guid": "61533c00-baea-410c-81be-424d59cfd19c",
       "isActive": false,
       "balance": "$3,828.67",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "_id": "5c35cd61b36a43da3bea4fae",
+      "id": "5c35cd61b36a43da3bea4fae",
       "guid": "fff2e2ef-e6ab-4034-9071-84a201c4a631",
       "isActive": true,
       "balance": "$3,684.58",
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "_id": "5c35cd617d6ad9306b978de9",
+      "id": "5c35cd617d6ad9306b978de9",
       "guid": "687e94aa-1923-4be0-8fce-8e011b8e9a88",
       "isActive": false,
       "balance": "$3,410.27",
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "_id": "5c35cd6180151866672ba858",
+      "id": "5c35cd6180151866672ba858",
       "guid": "bc6b64c5-7ba8-40bf-a273-5bac46ec0683",
       "isActive": false,
       "balance": "$3,116.89",
@@ -113,7 +113,7 @@
       ]
     },
     {
-      "_id": "5c35cd61c12c17c55fda4542",
+      "id": "5c35cd61c12c17c55fda4542",
       "guid": "3ed50653-9bd2-4e70-bde3-fdc9f6a8b84f",
       "isActive": false,
       "balance": "$2,265.52",
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "_id": "5c35cd61464365fe69900ae1",
+      "id": "5c35cd61464365fe69900ae1",
       "guid": "b45d0069-d617-476e-8d8a-57ea88aef536",
       "isActive": true,
       "balance": "$2,948.31",
@@ -169,7 +169,7 @@
       ]
     },
     {
-      "_id": "5c35cd6107046a4583afb099",
+      "id": "5c35cd6107046a4583afb099",
       "guid": "26e3d6d2-d068-47e1-8319-70513b2285ba",
       "isActive": true,
       "balance": "$2,757.70",
@@ -196,20 +196,8 @@
         "sit"
       ]
     }
-  ]
-,
+  ],
   "projects": [
-    {
-      "id": "1",
-      "title": "Project HOLLA!",
-      "details": "This is a sample project",
-      "percentComplete": 20,
-      "approved": false,
-      "startDate": null,
-      "targetDate": null,
-      "completionDate": null,
-      "customerId": "1"
-    },
     {
       "id": "I_ceo10",
       "title": "test 55999",

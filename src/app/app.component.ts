@@ -2,6 +2,8 @@ import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/co
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {UserService} from './services/user.service';
 import {IUser} from './store/models/user.model';
+import {Observable} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -11,46 +13,43 @@ import {IUser} from './store/models/user.model';
 export class AppComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
-    private userService: UserService
+    private userService: UserService,
+    private fb: FormBuilder,
   ) {  }
 
   @ViewChild('modalForm', {static: false}) modalForm: ElementRef;
 
   title = 'angular-CRUD';
   closeResult: string;
-  usersList;
 
+  users$: Observable<IUser[]>;
+  userForUpdate: {};
   isLoadingForm = false;
   formTitle;
   saveBtnText;
+  userForUpdate = {};
+
+  usersForm: FormGroup;
 
   testUser = {
-    "_id": "5c35cd617d6ad9306b978de9",
-    "guid": "687e94aa-1923-4be0-8fce-8e011b8e9a88",
+    "id": '',
+    "guid": '',
     "isActive": false,
-    "balance": "testUser",
+    "balance": '',
     "picture": "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    "age": 36,
-    "eyeColor": "green",
-    "name": "testUser testUser",
-    "gender": "male",
-    "company": "ORBIFLEX",
-    "email": "scottmann@orbiflex.com",
-    "phone": "+1 (904) 497-2520",
-    "address": "828 Williamsburg Street, Walland, Michigan, 487",
-    "about": "Aliqua aliquip quis nostrud aute nostrud ut quis aute mollit. Eu et esse voluptate nulla cupidatat eu ut laborum consequat tempor ad do. Velit occaecat cupidatat laboris ea deserunt.\r\n",
-    "registered": "2014-09-18T08:46:45 -03:00",
-    "latitude": 26.9417,
-    "longitude": 53.353221,
-    "tags": [
-      "reprehenderit",
-      "ut",
-      "sit",
-      "esse",
-      "aliquip",
-      "tempor",
-      "ipsum"
-    ]
+    "age": 0,
+    "eyeColor": '',
+    "name": '',
+    "gender": '',
+    "company": '',
+    "email": '',
+    "phone": '',
+    "address": '',
+    "about": '',
+    "registered": '',
+    "latitude": 0,
+    "longitude": 0,
+    "tags": []
   };
 
   private getDismissReason(reason: any): string {
@@ -67,39 +66,84 @@ export class AppComponent implements OnInit {
     console.log('redirect to', i );
   }
 
+  private getAllUsers(): void {
+    this.users$ = this.userService.getUsers();
+  }
+
   private createUser(): void {
     this.formTitle = 'Create new user';
     this.saveBtnText = 'Create';
     this.openModal(false);
   }
 
-  private editUser(e, i): void {
+  private editUser(e, user): void {
     e.stopPropagation();
     this.formTitle = 'Update user';
     this.saveBtnText = 'Update';
-    this.openModal(i);
+    // this.userForUpdate = user;
+    this.openModal(user);
   }
 
-  private deleteUser(e, i): void {
+  private deleteUser(e, id): void {
     e.stopPropagation();
-    console.log('deleteUser ', i );
+    const subscribeUserDel = this.userService.deleteUser(id).subscribe(
+      (data) => {
+        console.log('User was deleted successfully!');
+        this.getAllUsers();
+      },
+      (errors) => {
+        console.log('Error: ', errors);
+      }
+    );
   }
 
-  private saveData(isUpdate): void {
+  private saveData(userForUpdate) {
+
+    if (this.usersForm.invalid) {
+      console.log('ERRORS IN THE FORM');
+      return false;
+    }
+
+    for (const control in this.usersForm.controls) {
+      if (this.usersForm.controls.hasOwnProperty(control)) {
+        this.testUser[control] = this.usersForm.controls[control].value;
+      }
+    }
+
+    this.testUser.id = this.getUniqueId();
+    this.testUser.registered = new Date();
     this.isLoadingForm = true;
-    if ( isUpdate ) {
+
+    console.log('c', this.testUser);
+
+    if ( userForUpdate ) {
       console.log('UPDATE' );
     } else {
-      this.userService.createUser(this.testUser);
-      console.log('CREATE ' );
+      const subscribeUserCreate = this.userService.createUser(this.testUser).subscribe(
+        (data) => {
+          this.successHandler('User was saved successfully!');
+        }
+      );
     }
   }
 
-  openModal(id) {
-    if (id) {
-      console.log('UPDATE', id );
-    } else {
-      console.log('CREATE' );
+  private successHandler(msg): void {
+    this.isLoadingForm = false;
+    this.modalService.dismissAll();
+    console.log(msg);
+    this.getAllUsers();
+  }
+
+  private getUniqueId(): string {
+    return '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  openModal(user) {
+    this.initForm();
+    this.userForUpdate = user ? user : {};
+
+    if (user) {
+      this.updateForm(user);
     }
 
     this.modalService.open(this.modalForm, {ariaLabelledBy: this.formTitle}).result.then((result) => {
@@ -111,12 +155,36 @@ export class AppComponent implements OnInit {
     });
   }
 
+  initForm(): void {
+    this.usersForm = this.fb.group({
+      name: [ null, [
+        Validators.required,
+        Validators.pattern(/[a-zA-z]+/)
+      ]],
+      company: [ null, [
+        Validators.required
+      ]],
+      email: [ null, [
+        Validators.required,
+        Validators.email
+      ]],
+      phone: [ null, [
+        Validators.required
+      ]],
+    });
+  }
+
+  updateForm(user): void {
+    console.log('start', user);
+    for (const control of Object.keys(this.usersForm.controls) ) {
+      console.log('contr', user[control])
+      // this.controls[name].patchValue(value[name], {onlySelf: true, emitEvent});
+      this.usersForm.controls[control].patchValue( user[control]);
+    }
+  }
+
   ngOnInit() {
-    this.userService.getUsers().subscribe(
-      (users: IUser[]) => this.usersList = users,
-      (err) => console.log(err)
-    );
-    console.log('data', this.usersList);
+    this.getAllUsers();
   }
 
 }
