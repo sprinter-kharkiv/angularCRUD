@@ -1,0 +1,20 @@
+<div class="container">
+
+    <div class="user-card mt-5">
+        <h3>{{ userCurrent?.name }}</h3>
+        <div class="row">
+            <div class="col-sm-4">
+                <img class="user-card__img" src="{{ userCurrent?.picture }}" alt="">
+            </div>
+            <div class="col-sm-8">
+                <p>{{ userCurrent?.about }}</p>
+                <p><b>Registered: </b>{{ registered | date:'yyyy-MM-dd HH:mm' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="opacity: .4" *ngFor="let item of userCurrent | keyvalue">
+        {{ item.key }} - {{ item.value }}
+    </div>
+
+</div>

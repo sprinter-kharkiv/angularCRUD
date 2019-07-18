@@ -15,7 +15,7 @@
       "phone": "+1 (927) 495-3329",
       "address": "850 Croton Loop, Saticoy, California, 5303",
       "about": "Duis pariatur sit elit proident ut eiusmod sint laborum et ad duis aliquip in. Aute quis eu elit ex do est magna consectetur mollit deserunt exercitation ipsum pariatur ad. Mollit consectetur ullamco aliquip quis qui amet ea aliquip. Labore aliqua veniam id nulla et sunt proident enim anim. Non cillum pariatur esse labore mollit proident in labore enim. Amet minim dolor dolore laborum nulla.\r\n",
-      "registered": "2018-08-27T05:16:47 -03:00",
+      "registered": "2018-08-27T05:16:47-03:00",
       "latitude": -12.467538,
       "longitude": 14.314712,
       "tags": [
@@ -43,7 +43,7 @@
       "phone": "+1 (840) 510-2244",
       "address": "323 Montague Terrace, Fillmore, Northern Mariana Islands, 4551",
       "about": "Pariatur in id ad nostrud ad incididunt non est. Nisi culpa ullamco eiusmod eiusmod minim eu. Consectetur dolor nostrud qui aliqua.\r\n",
-      "registered": "2016-12-01T01:43:31 -02:00",
+      "registered": "2016-12-01T01:43:31-02:00",
       "latitude": -62.867176,
       "longitude": 148.912369,
       "tags": [
@@ -71,7 +71,7 @@
       "phone": "+1 (904) 497-2520",
       "address": "828 Williamsburg Street, Walland, Michigan, 487",
       "about": "Aliqua aliquip quis nostrud aute nostrud ut quis aute mollit. Eu et esse voluptate nulla cupidatat eu ut laborum consequat tempor ad do. Velit occaecat cupidatat laboris ea deserunt.\r\n",
-      "registered": "2014-09-18T08:46:45 -03:00",
+      "registered": "2014-09-18T08:46:45-03:00",
       "latitude": 26.9417,
       "longitude": 53.353221,
       "tags": [
@@ -166,34 +166,6 @@
         "aliquip",
         "tempor",
         "duis"
-      ]
-    },
-    {
-      "id": "5c35cd6107046a4583afb099",
-      "guid": "26e3d6d2-d068-47e1-8319-70513b2285ba",
-      "isActive": true,
-      "balance": "$2,757.70",
-      "picture": "http://placehold.it/32x32",
-      "age": 35,
-      "eyeColor": "brown",
-      "name": "Wagner Mcguire",
-      "gender": "male",
-      "company": "SARASONIC",
-      "email": "wagnermcguire@sarasonic.com",
-      "phone": "+1 (938) 489-3377",
-      "address": "782 Howard Avenue, Navarre, Tennessee, 3713",
-      "about": "Nisi pariatur tempor amet proident voluptate. Occaecat ex et et qui commodo nostrud do. Et pariatur cillum amet veniam deserunt laboris enim et eiusmod esse Lorem. In tempor esse dolore sit magna. Irure qui dolore anim exercitation nulla velit qui anim cupidatat ea reprehenderit consectetur. Laboris deserunt excepteur aute proident tempor.\r\n",
-      "registered": "2016-10-12T01:27:54 -03:00",
-      "latitude": 24.565408,
-      "longitude": 171.182071,
-      "tags": [
-        "proident",
-        "ea",
-        "officia",
-        "cillum",
-        "duis",
-        "minim",
-        "sit"
       ]
     }
   ],

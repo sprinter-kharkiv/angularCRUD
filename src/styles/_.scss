@@ -1,0 +1,99 @@
+@import "variables";
+
+.user-general {
+  display: flex;
+
+  &__avatar {
+    flex-basis: 80px;
+    min-width: 80px;
+    height: 80px;
+    margin-right: 1.5em;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: 50% 50%;
+
+    &--online {
+      border: 2px solid $accent_green;
+    }
+
+    &--offline {
+      border: 2px solid $accent_orange;
+    }
+  }
+
+  &__info {
+
+  }
+
+  &__action {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+    margin-left: auto;
+    transition: all .33s;
+    transform-origin: 100% 100%;
+
+    > * {
+      margin-left: .5em;
+    }
+  }
+
+  &:hover {
+    .user-general__action {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+      transition: all .3s;
+      transform-origin: 100% 0;
+    }
+  }
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .25rem;
+}
+
+.loading {
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1.2em;
+    height: 1.2em;
+    margin-top: -.6em;
+    margin-left: -.6em;
+    animation: rotate-360 0.8s infinite linear;
+    border: 2px solid gray;
+    border-radius: 50%;
+    border-right-color: $accent_blue;
+    border-top-color: $accent_blue;
+    z-index: 2;
+  }
+
+  &:before {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: -1px;
+    bottom: -1px;
+    z-index: 1;
+  }
+}
+
+@keyframes rotate-360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+input.ng-touched.ng-invalid{
+  border-color: red;
+}
+
