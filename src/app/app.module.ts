@@ -5,7 +5,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
+import { UsersEffects } from '@store/effects/users.effects';
+import { StoreModule } from '@ngrx/store';
+import { appReducers } from '@store/reducers';
+import { ToastrModule } from 'ngx-toastr';
+
+const effects = [
+  UsersEffects,
+];
+
+const toastrConfig = {
+  timeOut: 4000,
+  positionClass: 'toast-top-right',
+  progressBar: true,
+};
 
 @NgModule({
   declarations: [
@@ -16,6 +30,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     NgbModalModule,
     HttpClientModule,
+    ToastrModule.forRoot(toastrConfig),
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot(effects),
   ],
   providers: [],
   bootstrap: [AppComponent]

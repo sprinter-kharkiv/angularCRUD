@@ -15,9 +15,9 @@
             </div>
 
             <div class="list-group list-group-flush">
-                <a *ngFor="let user of users$ | async; let i = index;" href="#" class="list-group-item list-group-item-action" (click)="viewDetail($event, user.id)">
+                <a *ngFor="let user of usersList; let i = index;" href="#" class="list-group-item list-group-item-action" (click)="viewDetail($event, user.id)">
                     <div class="user-general">
-                        <div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar--online' : 'user-general__avatar--offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>
+                        <!--<div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar&#45;&#45;online' : 'user-general__avatar&#45;&#45;offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>-->
                         <div class="user-general__info">
                             <h4>{{ user.name }}</h4>
                             <h5>{{ user.balance != 0 ? user.balance : user.company }}</h5>

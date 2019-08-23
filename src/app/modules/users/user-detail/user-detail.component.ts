@@ -1,30 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {UserService} from '../../../services/user.service';
+import { UsersService } from '@services/users.service';
+import { Subject } from 'rxjs';
+import { IUser } from '@store/models/user.model';
+import * as actions from '@store/actions/users.actions';
+import * as usersReducers from '@store/reducers/users.reducer';
+import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss']
 })
-export class UserDetailComponent implements OnInit {
-  userCurrent;
-  registered
+export class UserDetailComponent implements OnInit, OnDestroy {
+  isLoading: boolean;
+  userCurrent: IUser;
+  registered: Date;
+  private readonly onDestroy = new Subject<void>();
 
   constructor(
-      private route: ActivatedRoute,
-      private userService: UserService,
+    private storeUsers: Store<usersReducers.State>,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    const userSubscribe = this.userService.getUserById(this.route.snapshot.params['id']).subscribe(
-        (user) => {
-          this.userCurrent = user;
-          console.log('date string', this.userCurrent.registered)
-          this.registered = new Date(Date.parse(this.userCurrent.registered));
-          console.log('date', this.registered)
-        }
-    );
+    this.storeUsers.dispatch(new actions.GetUserById(this.route.snapshot.params['id']));
+    this.storeUsers.select(state => state.users)
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((res: { [key: string]: any }) => {
+        this.userCurrent = res.user;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.complete();
   }
 
 }

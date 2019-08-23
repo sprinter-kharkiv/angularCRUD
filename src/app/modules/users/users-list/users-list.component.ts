@@ -1,10 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {UserService} from '../../../services/user.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {IUser} from '../../../store/models/user.model';
-import {Router} from '@angular/router';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { IUser } from '../../../store/models/user.model';
+import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import * as actions from '@store/actions/users.actions';
+import { Store } from '@ngrx/store';
+import * as usersReducers from '@store/reducers/users.reducer';
 
 
 @Component({
@@ -12,12 +15,13 @@ import {Router} from '@angular/router';
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss']
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy {
+
   constructor(
-      private router: Router,
-      private modalService: NgbModal,
-      private userService: UserService,
-      private fb: FormBuilder,
+    private storeUsers: Store<usersReducers.State>,
+    private router: Router,
+    private modalService: NgbModal,
+    private fb: FormBuilder,
   ) {
   }
 
@@ -26,15 +30,13 @@ export class UsersListComponent implements OnInit {
   title = 'angular-CRUD';
   closeResult: string;
 
-  users$: Observable<IUser[]>;
+  usersList: IUser[];
 
   isLoadingForm = false;
   formTitle;
   saveBtnText;
   userForUpdate = {};
-
   usersForm: FormGroup;
-
   emptyUser = {
     'id': '',
     'guid': '',
@@ -55,6 +57,8 @@ export class UsersListComponent implements OnInit {
     'longitude': 0,
     'tags': []
   };
+  private readonly onDestroy = new Subject<void>();
+
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -72,7 +76,12 @@ export class UsersListComponent implements OnInit {
   }
 
   private getAllUsers(): void {
-    this.users$ = this.userService.getUsers();
+    this.storeUsers.dispatch(new actions.GetUsers());
+    this.storeUsers.select(state => state.users)
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((res: { [key: string]: any }) => {
+        this.usersList = res.users;
+      });
   }
 
   private createUser(): void {
@@ -92,14 +101,7 @@ export class UsersListComponent implements OnInit {
 
   private deleteUser(e, id): void {
     e.stopPropagation();
-    const subscribeUserDel = this.userService.deleteUser(id).subscribe(
-        (data) => {
-          this.successHandler('User was deleted successfully!');
-        },
-        (errors) => {
-          console.log('Error: ', errors);
-        }
-    );
+    console.log('need to delete', id);
   }
 
   private saveData(userForUpdate) {
@@ -115,25 +117,15 @@ export class UsersListComponent implements OnInit {
 
     if (userForUpdate) {
       console.log('UPD ', userForUpdate);
-
       this.applayFormDataTo(userForUpdate);
-
-      const subscribeUserUpdate = this.userService.updateUser(userForUpdate).subscribe(
-          data => this.successHandler('User was update successfully!')
-      );
     } else {
       console.log('CREATe ');
-
       this.applayFormDataTo(this.emptyUser);
-
       this.emptyUser.id = this.getUniqueId();
       this.emptyUser.registered = (new Date()).toISOString();
-
-      const subscribeUserCreate = this.userService.createUser(this.emptyUser).subscribe(
-          data => this.successHandler('User was saved successfully!')
-      );
     }
   }
+
   private applayFormDataTo(user): void {
     for (const control in this.usersForm.controls) {
       if (this.usersForm.controls.hasOwnProperty(control)) {
@@ -196,5 +188,10 @@ export class UsersListComponent implements OnInit {
 
   ngOnInit() {
     this.getAllUsers();
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.complete();
   }
 }

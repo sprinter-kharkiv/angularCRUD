@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:3000/';
   providedIn: 'root'
 })
 
-export class UserService {
+export class UsersService {
   constructor(private http: HttpClient) {}
 
   model = 'customers';
@@ -23,15 +23,12 @@ export class UserService {
     return `${this.getUrl()}/${id}`;
   }
 
-
   getUsers(): Observable<IUser[]> {
-    console.log('get users')
     return this.http.get<IUser[]>(this.getUrl())
       .pipe(catchError((error: any) => throwError(error.json())));
   }
 
   getUserById(id): Observable<IUser> {
-    console.log('get user')
     return this.http.get<IUser>(this.getUrlForId(id))
       .pipe(catchError((error: any) => throwError(error.json())));
   }
@@ -49,25 +46,4 @@ export class UserService {
   deleteUser(id) {
     return this.http.delete(this.getUrlForId(id));
   }
-
-  // getUrlForId(id){
-  //   return `${this.getUrl()}/${id}`;
-  // }
-  //
-  // all() {
-  //   return this.HttpClient.get(this.getUrl());
-  // }
-  //
-  // create(project) {
-  //   return this.HttpClient.post(this.getUrl(), project)
-  // }
-  //
-  // update(project) {
-  //   return this.HttpClient.patch(this.getUrlForId(project.id), project)
-  // }
-  //
-  // delete(projectId) {
-  //   return this.HttpClient.delete(this.getUrlForId(projectId))
-  // }
-
 }
