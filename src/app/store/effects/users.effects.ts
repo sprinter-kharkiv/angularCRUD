@@ -19,7 +19,7 @@ export class UsersEffects {
     ofType(actions.UserActionType.GET_USERS),
     switchMap((action: {[key: string]: any}) => {
       return this.usersService.getUsers().pipe(
-        map((users: {[key: string]: any}) => {
+        map((users: IUser[]) => {
           return new actions.GetUsersSuccess(users);
         }),
         catchError(error => of(new actions.GetUsersFailed(error)))

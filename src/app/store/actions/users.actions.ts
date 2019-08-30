@@ -30,7 +30,7 @@ export class GetUsers implements Action {
 export class GetUsersSuccess implements Action {
   readonly type = UserActionType.GET_USERS_SUCCESS;
 
-  constructor(public payload: { [key: string]: any }) {
+  constructor(public payload: IUser[]) {
   }
 }
 
