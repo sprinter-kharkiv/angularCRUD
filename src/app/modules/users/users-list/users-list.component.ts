@@ -9,7 +9,6 @@ import * as actions from '@store/actions/users.actions';
 import { Store } from '@ngrx/store';
 import * as usersReducers from '@store/reducers/users.reducer';
 
-
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
@@ -21,7 +20,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
     private storeUsers: Store<usersReducers.State>,
     private router: Router,
     private modalService: NgbModal,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {
   }
 
@@ -76,7 +75,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   private getAllUsers(): void {
-    this.storeUsers.dispatch(new actions.GetUsers());
     this.storeUsers.select(state => state.users)
       .pipe(takeUntil(this.onDestroy))
       .subscribe((res: { [key: string]: any }) => {
@@ -99,12 +97,13 @@ export class UsersListComponent implements OnInit, OnDestroy {
     this.openModal(user);
   }
 
-  private deleteUser(e, id): void {
+  private deleteUser(e, user): void {
     e.stopPropagation();
-    console.log('need to delete', id);
+    this.storeUsers.dispatch(new actions.DeleteUser(user));
   }
 
-  private saveData(userForUpdate) {
+  private saveData(userForUpdate?) {
+    const user = userForUpdate || {...this.emptyUser};
 
     if (this.usersForm.invalid) {
       console.log('ERRORS IN THE FORM');
@@ -113,17 +112,18 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.isLoadingForm = true;
 
-    console.log('c', this.emptyUser);
+    this.applayFormDataTo(user);
 
     if (userForUpdate) {
-      console.log('UPD ', userForUpdate);
-      this.applayFormDataTo(userForUpdate);
+      this.storeUsers.dispatch(new actions.UpdateUser(user));
     } else {
-      console.log('CREATe ');
-      this.applayFormDataTo(this.emptyUser);
-      this.emptyUser.id = this.getUniqueId();
-      this.emptyUser.registered = (new Date()).toISOString();
+      user.id = this.getUniqueId();
+      user.registered = (new Date()).toISOString();
+      this.storeUsers.dispatch(new actions.AddUser(user));
     }
+    this.isLoadingForm = false;
+    this.modalService.dismissAll();
+    this.usersList.push(user);
   }
 
   private applayFormDataTo(user): void {
@@ -132,13 +132,6 @@ export class UsersListComponent implements OnInit, OnDestroy {
         user[control] = this.usersForm.controls[control].value;
       }
     }
-  }
-
-  private successHandler(msg): void {
-    this.isLoadingForm = false;
-    this.modalService.dismissAll();
-    console.log(msg);
-    this.getAllUsers();
   }
 
   private getUniqueId(): string {
@@ -154,10 +147,8 @@ export class UsersListComponent implements OnInit, OnDestroy {
 
     this.modalService.open(this.modalForm, {ariaLabelledBy: this.formTitle}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
-      console.log('saved', this.closeResult);
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log('closed', this.closeResult);
     });
   }
 
@@ -187,6 +178,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.storeUsers.dispatch(new actions.GetUsers());
     this.getAllUsers();
   }
 

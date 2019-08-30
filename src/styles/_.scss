@@ -97,3 +97,54 @@ input.ng-touched.ng-invalid{
   border-color: red;
 }
 
+.pre-formatted {
+  outline: 1px solid #ccc; padding: 5px; margin: 5px;
+  .string {
+    color: green;
+  }
+  .number {
+    color: darkorange;
+  }
+  .null {
+    color: magenta;
+  }
+  .key {
+    color: red;
+  }
+}
+
+.preloader {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.6);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &__circle {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 50px;
+    width: 50px;
+    margin: -25px 0 0 -25px;
+    border: 4px rgba(0, 0, 0, 0.25) solid;
+    border-top: 4px $accent_blue solid;
+    border-bottom: 4px $accent_blue solid;
+    border-radius: 50%;
+    -webkit-animation: spin1 1s infinite linear;
+    animation: spin1 1s infinite linear;
+  }
+}
+
+@keyframes spin1 {
+  from {
+    transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}

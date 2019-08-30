@@ -17,8 +17,9 @@
             <div class="list-group list-group-flush">
                 <a *ngFor="let user of usersList; let i = index;" href="#" class="list-group-item list-group-item-action" (click)="viewDetail($event, user.id)">
                     <div class="user-general">
-                        <!--<div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar&#45;&#45;online' : 'user-general__avatar&#45;&#45;offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>-->
+                        <div class="user-general__avatar" [ngClass]=" user.isActive ? 'user-general__avatar--online' : 'user-general__avatar--offline'" [ngStyle]="{'background-image': 'url(' + user.picture + ')'}"></div>
                         <div class="user-general__info">
+                            <h4>{{ user.id }}</h4>
                             <h4>{{ user.name }}</h4>
                             <h5>{{ user.balance != 0 ? user.balance : user.company }}</h5>
                         </div>
@@ -26,7 +27,7 @@
                             <button type="button" class="btn-icon btn btn-success  btn-sm" (click)="editUser($event, user)">
                                 <i class="material-icons">create</i>
                             </button>
-                            <button type="button" class="btn-icon btn btn-danger  btn-sm" (click)="deleteUser($event, user.id)">
+                            <button type="button" class="btn-icon btn btn-danger  btn-sm" (click)="deleteUser($event, user)">
                                 <i class="material-icons">clear</i>
                             </button>
                         </div>
@@ -73,9 +74,6 @@
                         </div>
 
                     </form>
-                    <div>
-                        {{usersForm.value | json}}
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button"

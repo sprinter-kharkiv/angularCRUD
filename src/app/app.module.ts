@@ -10,6 +10,7 @@ import { UsersEffects } from '@store/effects/users.effects';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from '@store/reducers';
 import { ToastrModule } from 'ngx-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const effects = [
   UsersEffects,
@@ -27,6 +28,7 @@ const toastrConfig = {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     NgbModalModule,
     HttpClientModule,
